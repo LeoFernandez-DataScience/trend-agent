@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import json
 from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
 
@@ -9,8 +10,11 @@ RANGE = "Trends!A1:Z1000"
 
 
 def load_data():
-    creds = Credentials.from_service_account_file(
-        "credentials/google-service-account.json",
+    # 🔥 Lê credenciais do Streamlit Secrets (em vez de arquivo local)
+    creds_dict = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+
+    creds = Credentials.from_service_account_info(
+        creds_dict,
         scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
     )
 
